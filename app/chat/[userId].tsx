@@ -2,8 +2,8 @@
 import { View, Text, TextInput, FlatList, Pressable } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useLocalSearchParams } from 'expo-router';
-import { useUser } from '@/lib/useUser';
-import { useChatSocket } from '@/hooks/useChatSocket';
+import { useUser } from '@/hooks/user/useUser';
+import { useChatSocket } from '@/hooks/chat/useChatSocket'; // Updated path
 import { api } from '@/lib/api';
 
 export default function ChatScreen() {

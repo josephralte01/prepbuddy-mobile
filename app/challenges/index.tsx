@@ -3,9 +3,9 @@ import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { api } from '@/lib/api';
-import { useUser } from '@/lib/useUser';
-import { useChallengeSocket } from '@/hooks/useChallengeSocket';
-import ChallengeCard from '@/components/ChallengeCard';
+import { useUser } from '@/hooks/user/useUser';
+import { useChallengeSocket } from '@/hooks/challenges/useChallengeSocket';
+import ChallengeCard from '@/components/challenges/ChallengeCard'; // Updated path
 
 export default function ChallengesScreen() {
   const { user } = useUser();

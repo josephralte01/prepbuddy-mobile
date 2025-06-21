@@ -1,57 +1,83 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Tabs, Redirect } from 'expo-router'; // Removed Link and Pressable as they are not used for basic tabs
+// Href is an object for Tabs.Screen, not a component here.
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+// useClientOnlyValue might not be needed if headerShown is consistent across platforms or handled differently.
+// For simplicity, let's assume headerShown: false for these tabs, or it's handled by the screen itself.
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+// TabBarIcon helper component
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={24} style={{ marginBottom: -3 }} {...props} />; // Adjusted size
 }
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const activeTintColor = Colors[colorScheme ?? 'light'].tint;
+  const inactiveTintColor = Colors[colorScheme ?? 'light'].tabIconDefault; // Using a common inactive color
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        tabBarActiveTintColor: activeTintColor,
+        tabBarInactiveTintColor: inactiveTintColor,
+        headerShown: false, // Common to disable headers for tab screens, let screens manage their own.
+        tabBarStyle: {
+            // backgroundColor: Colors[colorScheme ?? 'light'].background, // Optional: if tab bar needs specific bg
+            // borderTopColor: Colors[colorScheme ?? 'light'].tabIconDefault, // Optional
+        }
       }}>
+      {/* Tab 1: Learn - Default initial route for (tabs) */}
+      {/* To make "learn" the default, we can either have an index.tsx that redirects,
+          or rely on the order and Expo Router's default behavior.
+          For explicit default, an index.tsx file in (tabs) that redirects to /learn is best.
+          Let's create that redirect file after this.
+      */}
+      <Tabs.Screen name="index" options={{ href: null, title: "Redirect" }} />
+
       <Tabs.Screen
-        name="index"
+        name="learn" // This will expect app/(tabs)/learn.tsx or similar
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          title: 'Learn',
+          href: '/learn', // Points to app/learn/index.tsx
+          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="habits"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Habits',
+          href: '/habits', // Points to app/habits/index.tsx
+          tabBarIcon: ({ color }) => <TabBarIcon name="check-square-o" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="challenges"
+        options={{
+          title: 'Challenges',
+          href: '/challenges', // Points to app/challenges/index.tsx
+          tabBarIcon: ({ color }) => <TabBarIcon name="trophy" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="leaderboard"
+        options={{
+          title: 'Rankings', // Changed title for brevity
+          href: '/leaderboard', // Points to app/leaderboard/index.tsx
+          tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          href: '/profile', // Points to app/profile/index.tsx
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </Tabs>

@@ -1,4 +1,4 @@
-import { useUser } from '@/lib/useUser';
+import { useUser } from '@/hooks/user/useUser'; // Updated path
 import { Redirect } from 'expo-router';
 import { ReactNode } from 'react';
 import { ActivityIndicator, View } from 'react-native';
